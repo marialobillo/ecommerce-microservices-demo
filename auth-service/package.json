@@ -1,67 +1,62 @@
 {
-  "name": "ecommerce-microservices-demo",
+  "name": "@ecommerce/auth-service",
   "version": "1.0.0",
-  "description": "Microservices e-commerce demo showcasing Keycloak authentication, NestJS catalog API, and AI-powered recommendations dashboard",
-  "main": "index.js",
-  "directories": {
-    "doc": "docs"
-  },
-  "workspaces": [
-    "auth-service",
-    "catalog-service",
-    "ai-dashboard"
-  ],
+  "description": "Authentication microservice with Keycloak integration",
+  "main": "dist/app.js",
   "scripts": {
-    "dev": "docker-compose -f docker-compose.dev.yml up -d",
-    "dev:logs": "docker-compose -f docker-compose.dev.yml logs -f",
-    "dev:down": "docker-compose -f docker-compose.dev.yml down",
-    "dev:clean": "docker-compose -f docker-compose.dev.yml down -v --remove-orphans",
-    "auth:dev": "cd auth-service && npm run dev",
-    "catalog:dev": "cd catalog-service && npm run start:dev",
-    "dashboard:dev": "cd ai-dashboard && npm run dev",
-    "test": "npm run test --workspaces",
-    "test:coverage": "npm run test:coverage --workspaces",
-    "lint": "npm run lint --workspaces",
-    "lint:fix": "npm run lint:fix --workspaces",
-    "build": "npm run build --workspaces",
-    "docker:build": "docker-compose -f docker-compose.prod.yml build",
-    "docker:up": "docker-compose -f docker-compose.prod.yml up -d",
-    "infra:plan": "cd infrastructure/terraform && terraform plan",
-    "infra:apply": "cd infrastructure/terraform && terraform apply"
+    "build": "tsc",
+    "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
+    "start": "node dist/app.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "typecheck": "tsc --noEmit"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/marialobillo/ecommerce-microservices-demo.git"
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "morgan": "^1.10.0",
+    "dotenv": "^16.3.1",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "axios": "^1.6.0",
+    "pg": "^8.11.3",
+    "joi": "^17.11.0",
+    "express-rate-limit": "^7.1.5",
+    "express-validator": "^7.0.1",
+    "winston": "^3.11.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/cors": "^2.8.17",
+    "@types/morgan": "^1.9.9",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/pg": "^8.10.9",
+    "@types/node": "^20.10.0",
+    "@types/jest": "^29.5.8",
+    "@types/supertest": "^2.0.16",
+    "typescript": "^5.3.2",
+    "ts-node-dev": "^2.0.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.1",
+    "supertest": "^6.3.3",
+    "eslint": "^8.56.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.1",
+    "@typescript-eslint/parser": "^6.13.1",
+    "prettier": "^3.1.0"
   },
   "keywords": [
-    "microservices",
-    "keycloak",
-    "nestjs",
-    "nextjs",
-    "express",
-    "aws",
-    "docker",
-    "ecommerce",
     "authentication",
+    "keycloak",
+    "express",
     "jwt",
-    "postgresql",
+    "microservice",
     "typescript"
   ],
   "author": "Maria Lobillo-Santos",
-  "license": "MIT",
-  "type": "commonjs",
-  "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^7.0.0",
-    "@typescript-eslint/parser": "^7.0.0",
-    "eslint": "^8.56.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.1.0",
-    "prettier": "^3.2.5",
-    "husky": "^9.0.0",
-    "lint-staged": "^15.2.0"
-  },
-  "bugs": {
-    "url": "https://github.com/marialobillo/ecommerce-microservices-demo/issues"
-  },
-  "homepage": "https://github.com/marialobillo/ecommerce-microservices-demo#readme"
+  "license": "MIT"
 }
