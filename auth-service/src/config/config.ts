@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-export config config = {
+export const config = {
   // Server
   port: parseInt(process.env.AUTH_SERVICE_PORT || '3001'),
   nodeEnv: process.env.NODE_ENV || 'development',
