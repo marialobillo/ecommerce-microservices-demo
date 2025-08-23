@@ -28,6 +28,18 @@ export const keycloakConfig = {
   }
 }
 
+/**
+ * Build full URL for Keycloak endpoints
+ */
+export const buildKeycloakUrl = (endpoint: string): string => {
+  const url = keycloakConfig.endpoints[endpoint as keyof typeof keycloakConfig.endpoints];
+  if (!url) {
+    throw new Error(`Unknown Keycloak endpoint: ${endpoint}`);
+  }
+  
+  return `${keycloakConfig.serverUrl}${url.replace('{realm}', keycloakConfig.realm)}`;
+};
+
 /*
 * Validate Keycloak configuration
 */
