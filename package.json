@@ -1,0 +1,10 @@
+{
+  "name": "ecommerce-microservices-demo",
+  "workspaces": ["auth-service", "catalog-service", "ai-dashboard"],
+  "scripts": {
+    "auth:dev": "cd auth-service && npm run dev",      
+    "catalog:dev": "cd catalog-service && npm run dev",
+    "dev": "docker-compose up -d",                    
+    "build": "npm run build --workspaces"            
+  }
+}

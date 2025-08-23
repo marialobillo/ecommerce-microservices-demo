@@ -1,0 +1,33 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  # Basic validation job - only what we can test right now
+  validate:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Check Docker Compose syntax
+      run: docker compose -f docker-compose.dev.yml config
+
+    - name: Validate project structure
+      run: |
+        echo "✅ Checking project structure..."
+        ls -la
+        echo "✅ Docker Compose file exists"
+        
+    - name: Validate environment template
+      run: |
+        if [ ! -f .env.example ]; then
+          echo "❌ .env.example not found"
+          exit 1
+        fi
+        echo "✅ .env.example exists"
