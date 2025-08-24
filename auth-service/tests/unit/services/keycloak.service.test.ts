@@ -164,4 +164,33 @@ describe('KeycloakService', () => {
     });
   });
 
+  describe('introspectToken', () => {
+    it('should successfully introspect token', async () => {
+      mockedAxios.post.mockResolvedValue({ data: mockIntrospectResponse });
+
+      const result = await keycloakService.introspectToken(MOCK_ACCESS_TOKEN);
+
+      expect(result).toEqual(mockIntrospectResponse);
+      expect(result.active).toBe(true);
+    });
+  });
+
+  describe('getServiceAccountToken', () => {
+    it('should successfully get service account token', async () => {
+      // Arrange
+      const serviceTokenResponse = { ...mockTokenResponse, scope: 'service' };
+      mockedAxios.post.mockResolvedValue({ data: serviceTokenResponse });
+
+      // Act
+      const result = await keycloakService.getServiceAccountToken();
+
+      // Assert
+      expect(result).toEqual(serviceTokenResponse);
+      expect(mockedAxios.post).toHaveBeenCalledWith(
+        expect.stringContaining('/token'),
+        expect.any(URLSearchParams)
+      );
+    });
+  });
+
 });
