@@ -143,6 +143,25 @@ describe('KeycloakService', () => {
     });
   });
 
-  
+  describe('logout', () => {
+    it('should successfully logout', async () => {
+      mockedAxios.post.mockResolvedValue({ data: {} });
+
+      await expect(keycloakService.logout({ refresh_token: MOCK_REFRESH_TOKEN }))
+        .resolves.not.toThrow();
+      
+      expect(mockedAxios.post).toHaveBeenCalledWith(
+        expect.stringContaining('/logout'),
+        expect.any(URLSearchParams)
+      );
+    });
+
+    it('should handle logout errors gracefully', async () => {
+      mockedAxios.post.mockRejectedValue(new Error('Logout failed'));
+
+      await expect(keycloakService.logout({ refresh_token: MOCK_REFRESH_TOKEN }))
+        .resolves.not.toThrow();
+    });
+  });
 
 });
