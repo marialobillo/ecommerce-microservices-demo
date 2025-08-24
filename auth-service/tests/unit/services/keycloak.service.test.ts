@@ -86,7 +86,63 @@ describe('KeycloakService', () => {
         statusCode: 500
       });
     });
-
   });
 
-})
+  describe('refreshToken', () => {
+    it('should successfully refresh token', async () => {
+      const newTokenResponse = { ...mockTokenResponse, access_token: 'new-access-token' };
+      mockedAxios.post.mockResolvedValue({ data: newTokenResponse });
+
+      const result = await keycloakService.refreshToken({ refresh_token: MOCK_REFRESH_TOKEN });
+
+      expect(result).toEqual(newTokenResponse);
+      expect(mockedAxios.post).toHaveBeenCalledWith(
+        expect.stringContaining('/token'),
+        expect.any(URLSearchParams)
+      );
+    });
+
+    it('should throw AuthError for expired refresh token', async () => {
+      const error = {
+        response: { status: 400, data: TOKEN_EXPIRED_ERROR },
+        isAxiosError: true
+      };
+      mockedAxios.post.mockRejectedValue(error);
+
+      await expect(
+        keycloakService.refreshToken({ refresh_token: 'expired-token' })
+      ).rejects.toThrow(AuthError);
+    });
+  });
+
+  describe('getUserInfo', () => {
+    it('should successfully get user info', async () => {
+      mockedAxios.get.mockResolvedValue({ data: mockUserInfo });
+
+      const result = await keycloakService.getUserInfo(MOCK_ACCESS_TOKEN);
+
+      expect(result).toEqual(mockUserInfo);
+      expect(mockedAxios.get).toHaveBeenCalledWith(
+        expect.stringContaining('/userinfo'),
+        {
+          headers: {
+            Authorization: `Bearer ${MOCK_ACCESS_TOKEN}`
+          }
+        }
+      );
+    });
+
+    it('should throw AuthError for invalid token', async () => {
+      const error = {
+        response: { status: 401, data: { error: 'invalid_token' } },
+        isAxiosError: true
+      };
+      mockedAxios.get.mockRejectedValue(error);
+
+      await expect(keycloakService.getUserInfo('invalid-token')).rejects.toThrow(AuthError);
+    });
+  });
+
+  
+
+});
