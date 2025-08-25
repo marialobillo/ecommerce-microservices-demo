@@ -1,10 +1,19 @@
 {
   "name": "ecommerce-microservices-demo",
-  "workspaces": ["auth-service", "catalog-service", "ai-dashboard"],
+  "workspaces": [
+    "auth-service",
+    "catalog-service",
+    "ai-dashboard"
+  ],
   "scripts": {
-    "auth:dev": "cd auth-service && npm run dev",      
+    "auth:dev": "cd auth-service && npm run dev",
     "catalog:dev": "cd catalog-service && npm run dev",
-    "dev": "docker-compose up -d",                    
-    "build": "npm run build --workspaces"            
+    "dev": "docker-compose up -d",
+    "build": "npm run build --workspaces"
+  },
+  "dependencies": {
+    "axios": "^1.11.0",
+    "jsonwebtoken": "^9.0.2",
+    "keycloak-connect": "^26.1.1"
   }
 }
